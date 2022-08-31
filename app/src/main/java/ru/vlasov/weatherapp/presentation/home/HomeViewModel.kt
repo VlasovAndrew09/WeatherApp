@@ -1,13 +1,13 @@
 package ru.vlasov.weatherapp.presentation.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.vlasov.weatherapp.data.remote.model.ForecastResponseDto
-import ru.vlasov.weatherapp.domain.WeatherRepository
+import ru.vlasov.weatherapp.domain.location.LocationTracker
+import ru.vlasov.weatherapp.domain.repository.WeatherRepository
+import ru.vlasov.weatherapp.domain.model.ForecastResponse
 import ru.vlasov.weatherapp.domain.util.Resource
 import javax.inject.Inject
 
@@ -16,11 +16,11 @@ class HomeViewModel @Inject constructor(
     private val repository: WeatherRepository
 ): ViewModel() {
 
-    private val _weatherForecast = MutableLiveData<Resource<ForecastResponseDto>>()
+    private val _weatherForecast = MutableLiveData<Resource<ForecastResponse>>()
     val weatherForecast = _weatherForecast
 
     init {
-        getWeatherForecast()
+        //getWeatherForecast()
     }
 
     private fun getWeatherForecast() {
@@ -29,8 +29,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    fun getWeatherForecastCity(searchQueryCity: String) {
+        viewModelScope.launch {
+            _weatherForecast.value = Resource.Loading()
+            _weatherForecast.value = repository.getForecastWeatherCity(searchQueryCity)
+        }
     }
-    val text: LiveData<String> = _text
+
+    fun getWeatherForecastGps() {
+        viewModelScope.launch {
+            _weatherForecast.value = Resource.Loading()
+            _weatherForecast.value = repository.getForecastWeatherWithGps()
+        }
+    }
+
+    fun getForecastWeatherGeoCoordinates(lat: Double, lon: Double) {
+        viewModelScope.launch {
+            _weatherForecast.value = Resource.Loading()
+            _weatherForecast.value = repository.getForecastWeatherGeoCoordinates(lat, lon)
+        }
+    }
 }

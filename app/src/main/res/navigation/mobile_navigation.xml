@@ -9,17 +9,26 @@
         android:id="@+id/navigation_home"
         android:name="ru.vlasov.weatherapp.presentation.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <argument
+            android:name="coord"
+            android:defaultValue="@null"
+            app:argType="ru.vlasov.weatherapp.domain.model.Coord"
+            app:nullable="true" />
+    </fragment>
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="ru.vlasov.weatherapp.presentation.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/mapFragment"
+        android:name="ru.vlasov.weatherapp.presentation.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_mapFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@+id/navigation_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="ru.vlasov.weatherapp.presentation.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
 </navigation>

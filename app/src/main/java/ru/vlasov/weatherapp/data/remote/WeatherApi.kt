@@ -9,7 +9,7 @@ import ru.vlasov.weatherapp.data.remote.model.ForecastResponseDto
 interface WeatherApi {
 
     @GET("forecast")
-    fun getForecastWeatherGeoCoordinates(
+    suspend fun getForecastWeatherGeoCoordinates(
         @Query("lat")
         lat: Double,
         @Query("lon")
@@ -18,6 +18,19 @@ interface WeatherApi {
 
     @GET("forecast")
     suspend fun getForecastWeatherCity(
-        @Query("q") q: String
+        @Query("q") searchQueryCity: String
+    ): ForecastResponseDto
+
+    @GET("weather")
+    suspend fun getCurrentWeatherGeoCoordinates(
+        @Query("lat")
+        lat: Double,
+        @Query("lon")
+        lon: Double
+    ): ForecastResponseDto
+
+    @GET("weather")
+    suspend fun getCurrentWeatherCity(
+        @Query("q") searchQueryCity: String
     ): ForecastResponseDto
 }

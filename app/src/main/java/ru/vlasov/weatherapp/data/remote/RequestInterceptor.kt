@@ -19,6 +19,10 @@ class RequestInterceptor @Inject constructor() : Interceptor {
                 ApiConstants.WEATHER_UNIT_QUERY,
                 ApiConstants.WEATHER_UNIT_VALUE
             )
+            .addQueryParameter(
+                ApiConstants.LANGUAGE_QUERY,
+                ApiConstants.LANGUAGE_VALUE
+            )
             .build()
         val request = chain.request().newBuilder().url(url).build()
         return chain.proceed(request)

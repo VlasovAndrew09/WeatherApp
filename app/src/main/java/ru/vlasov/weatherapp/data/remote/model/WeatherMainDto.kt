@@ -6,8 +6,11 @@ import com.google.gson.annotations.SerializedName
 data class WeatherMainDto(
 
     @SerializedName("temp")
-    val temp: Double?,
+    val temp: Double,
 
     @SerializedName("humidity")
-    val humidity: Int?
+    val humidity: Int,
+
+    @SerializedName("pressure")
+    val pressure: Int
 )

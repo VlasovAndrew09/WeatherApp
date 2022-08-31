@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.vlasov.weatherapp.data.WeatherRepositoryImpl
-import ru.vlasov.weatherapp.domain.WeatherRepository
+import ru.vlasov.weatherapp.domain.repository.WeatherRepository
 import javax.inject.Singleton
 
 @Module

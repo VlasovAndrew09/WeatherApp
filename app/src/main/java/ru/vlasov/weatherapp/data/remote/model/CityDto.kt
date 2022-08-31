@@ -5,17 +5,20 @@ import com.google.gson.annotations.SerializedName
 data class CityDto(
 
     @SerializedName("id")
-    val id: Int?,
+    val id: Int,
 
     @SerializedName("name")
-    val name: String?,
+    val name: String,
+
+    @SerializedName("coord")
+    val coord: CoordDto,
 
     @SerializedName("country")
-    val country: String?,
+    val country: String,
 
     @SerializedName("sunrise")
-    val sunrise: Long?,
+    val sunrise: Long,
 
     @SerializedName("sunset")
-    val sunset: Long?
+    val sunset: Long
 )

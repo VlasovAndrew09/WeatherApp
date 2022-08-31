@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName
 
 data class ForecastResponseDto(
     @SerializedName("city")
-    val city: CityDto?,
+    val city: CityDto,
 
     @SerializedName("cnt")
-    val cnt: Int?,
+    val cnt: Int,
 
     @SerializedName("cod")
-    val cod: String?,
+    val cod: String,
 
     @SerializedName("message")
-    val message: Double?,
+    val message: Double,
 
     @SerializedName("list")
-    val list: List<ForecastListItemDto>?
+    val list: List<ForecastListItemDto>
 )

@@ -5,8 +5,11 @@ import com.google.gson.annotations.SerializedName
 data class WindDto(
 
     @SerializedName("speed")
-    val speed: Double?,
+    val speed: Double,
 
     @SerializedName("deg")
-    val deg: Double?
+    val deg: Double,
+
+    @SerializedName("gust")
+    val gust: Double
 )
