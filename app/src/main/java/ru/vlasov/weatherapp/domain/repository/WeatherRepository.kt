@@ -2,13 +2,14 @@ package ru.vlasov.weatherapp.domain.repository
 
 import ru.vlasov.weatherapp.data.remote.model.ForecastResponseDto
 import ru.vlasov.weatherapp.domain.model.ForecastResponse
+import ru.vlasov.weatherapp.domain.model.Weather
 import ru.vlasov.weatherapp.domain.util.Resource
 
 interface WeatherRepository {
 
-    suspend fun getForecastWeatherGeoCoordinates(lat: Double, lon: Double): Resource<ForecastResponse>
+    suspend fun getWeatherGeoCoordinates(lat: Double, lon: Double): Resource<Weather>
 
-    suspend fun getForecastWeatherCity(searchQueryCity: String): Resource<ForecastResponse>
+    suspend fun getWeatherCity(searchQueryCity: String): Resource<Weather>
 
-    suspend fun getForecastWeatherWithGps(): Resource<ForecastResponse>
+    suspend fun getWeatherWithGps(): Resource<Weather>
 }

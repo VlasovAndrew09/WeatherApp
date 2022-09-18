@@ -1,4 +1,4 @@
-package ru.vlasov.weatherapp.presentation
+package ru.vlasov.weatherapp.presentation.map
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.GoogleMap
@@ -25,7 +26,7 @@ import ru.vlasov.weatherapp.presentation.home.HomeViewModel
 @AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
     private var _binding: FragmentMapBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("FragmentMapBinding is null")
@@ -67,15 +68,18 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
             googleMap.clear()
             googleMap.addMarker(markerOptions)
             val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage("Тут?")
+            builder.setMessage("Показать погоду для этого места?")
             builder.setPositiveButton("Да") { _, _ ->
-                val bundle = Bundle().apply {
+                //viewModel.coordFromArgs.value = Coord(it.latitude, it.longitude)
+                viewModel.setCoordFromArgs(Coord(it.latitude, it.longitude))
+                /*val bundle = Bundle().apply {
                     putParcelable("coord", Coord(it.latitude, it.longitude))
                 }
                 findNavController().navigate(
                     R.id.action_mapFragment_to_navigation_home,
                     bundle
-                )
+                )*/
+                findNavController().popBackStack()
             }
             builder.setNegativeButton("Нет", null)
             val dialog: AlertDialog = builder.create()

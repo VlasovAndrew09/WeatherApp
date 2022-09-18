@@ -34,18 +34,6 @@ class DefaultLocationTracker @Inject constructor(
         }
     }
 
-    override fun checkSelfPermissions(): Boolean {
-        val hasAccessFineLocationPermission = ContextCompat.checkSelfPermission(
-            application,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        val hasAccessCoarseLocationPermission = ContextCompat.checkSelfPermission(
-            application,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        return hasAccessCoarseLocationPermission && hasAccessFineLocationPermission
-    }
-
     override fun checkGpsEnabled(): Boolean {
         val locationManager =
             application.getSystemService(Context.LOCATION_SERVICE) as LocationManager

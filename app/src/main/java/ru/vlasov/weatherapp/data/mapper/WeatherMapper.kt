@@ -14,7 +14,8 @@ fun CurrentWeatherResponseDto.toCurrentWeatherResponse() = CurrentWeatherRespons
     name = name,
     main = main.toWeatherMain(),
     weather = weather.toListWeatherItem(),
-    wind = wind.toWind()
+    wind = wind.toWind(),
+    coord = coord.toCoord()
 )
 
 fun ForecastResponseDto.toForecastResponse() = ForecastResponse(
@@ -22,11 +23,56 @@ fun ForecastResponseDto.toForecastResponse() = ForecastResponse(
     cnt = cnt,
     cod = cod,
     message = message,
-    list = list.toListForecastListItem()
+    list = list.toListForecastListItem(),
+    listDays = list.toListForecastDayItem()
 )
 
 fun List<ForecastListItemDto>.toListForecastListItem(): List<ForecastListItem> {
     return map { it.toForecastListItem() }
+}
+
+fun List<ForecastListItemDto>.toListForecastDayItem(): List<ForecastDayItem> {
+    val listForecastDayItem = arrayListOf<ForecastDayItem>()
+    val daysForFilter = arrayListOf<String>()
+    this.forEachIndexed { _, listItem ->
+        val day = SimpleDateFormat("dd", Locale.getDefault()).format(listItem.dt * 1000)
+        if (daysForFilter.contains(day).not()) {
+            daysForFilter.add(day)
+        }
+    }
+    if (daysForFilter.size == 6) {
+        daysForFilter.removeAt(5)
+    }
+    daysForFilter.forEach { dayForFilter ->
+        val listForecastListItemDto = this.filter {
+            SimpleDateFormat(
+                "dd",
+                Locale.getDefault()
+            ).format(it.dt * 1000) == dayForFilter
+        }
+        val day = SimpleDateFormat(
+            "d MMMM",
+            Locale.getDefault()
+        ).format(listForecastListItemDto[0].dt * 1000).toString()
+        val dayOfWeek = SimpleDateFormat(
+            "EEEE",
+            Locale.getDefault()
+        ).format(listForecastListItemDto[0].dt * 1000).toString()
+            .replaceFirstChar(Char::uppercase)
+        val tempMin = "${listForecastListItemDto.minOf { it.main.temp }.roundToInt()}°"
+        val tempMax = "${listForecastListItemDto.maxOf { it.main.temp }.roundToInt()}°"
+        val listForecastListItem = listForecastListItemDto.map { it.toForecastListItem() }
+        listForecastDayItem.add(
+            ForecastDayItem(
+                day,
+                dayOfWeek,
+                tempMin,
+                tempMax,
+                listForecastListItem
+            )
+        )
+    }
+    return listForecastDayItem
 }
 
 fun ForecastListItemDto.toForecastListItem() = ForecastListItem(
@@ -34,7 +80,7 @@ fun ForecastListItemDto.toForecastListItem() = ForecastListItem(
     main = main.toWeatherMain(),
     weather = weather.toListWeatherItem(),
     wind = wind.toWind(),
-    dtTxt = SimpleDateFormat("dd.MM HH:mm").format(dt * 1000).toString()
+    time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(dt * 1000).toString()
 )
 
 
@@ -45,7 +91,7 @@ fun List<WeatherItemDto>.toListWeatherItem(): List<WeatherItem> {
 fun WeatherMainDto.toWeatherMain() = WeatherMain(
     temp = "${temp.roundToInt()}°",
     humidity = "$humidity%",
-    pressure = "${(pressure*0.75).roundToInt()} мм.рт.ст"
+    pressure = "${(pressure * 0.75).roundToInt()} мм.рт.ст"
 )
 
 fun WeatherItemDto.toWeatherItem() = WeatherItem(

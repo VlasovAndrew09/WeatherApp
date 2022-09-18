@@ -5,5 +5,6 @@ data class CurrentWeatherResponse(
     val name: String,
     val main: WeatherMain,
     val weather: List<WeatherItem>,
-    val wind: Wind
+    val wind: Wind,
+    val coord: Coord
 )

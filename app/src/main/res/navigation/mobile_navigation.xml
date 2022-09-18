@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="ru.vlasov.weatherapp.presentation.home.HomeFragment"
-        android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_mapFragment"
@@ -18,10 +17,13 @@
             android:defaultValue="@null"
             app:argType="ru.vlasov.weatherapp.domain.model.Coord"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_weatherDetailFragment"
+            app:destination="@id/weatherDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="ru.vlasov.weatherapp.presentation.MapFragment"
+        android:name="ru.vlasov.weatherapp.presentation.map.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map">
         <action
@@ -29,6 +31,18 @@
             app:destination="@id/navigation_home"
             app:popUpTo="@+id/navigation_home"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherDetailFragment"
+        android:name="ru.vlasov.weatherapp.presentation.detail.WeatherDetailFragment"
+        android:label="fragment_weather_detail"
+        tools:layout="@layout/fragment_weather_detail">
+        <argument
+            android:name="forecastDayItem"
+            app:argType="ru.vlasov.weatherapp.domain.model.ForecastDayItem" />
+        <argument
+            android:name="cityName"
+            app:argType="string" />
     </fragment>
 
 </navigation>

@@ -19,5 +19,8 @@ data class CurrentWeatherResponseDto(
     val weather: List<WeatherItemDto>,
 
     @SerializedName("wind")
-    val wind: WindDto
+    val wind: WindDto,
+
+    @SerializedName("coord")
+    val coord: CoordDto
 )

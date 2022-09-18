@@ -7,16 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
-    <!-- evening resources -->
-    <color name="eveningTopGradientColor">#030632</color>
-    <color name="eveningBottomGradientColor">#4000A3</color>
-
-    <!-- night resource -->
-    <color name="nightTopGradientColor">#35416C</color>
-    <color name="nightBottomGradientColor">#151515</color>
-
-    <!-- morning resources -->
-    <color name="morningTopGradientColor">#32D0FC</color>
-    <color name="morningBottomGradientColor">#005CE0</color>
+    <color name="background_card_weather_bottom_gradient">#172A6F</color>
+    <color name="background_card_weather_top_gradient">#081548</color>
 </resources>
