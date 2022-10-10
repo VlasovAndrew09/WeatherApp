@@ -31,11 +31,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
     private val binding
         get() = _binding ?: throw RuntimeException("FragmentMapBinding is null")
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(this)
-    }*/
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,13 +50,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
         )
             googleMap.isMyLocationEnabled = true
 
-        /*val mapView = (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).requireView()
-        val locationButton = (mapView.findViewById<View>(1).parent as View).findViewById<View>(2)
-        val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-        rlp.setMargins(0, 0, 0, 180)*/
-
         googleMap.setOnMapClickListener {
             val markerOptions = MarkerOptions()
             markerOptions.position(it)
@@ -70,15 +58,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Показать погоду для этого места?")
             builder.setPositiveButton("Да") { _, _ ->
-                //viewModel.coordFromArgs.value = Coord(it.latitude, it.longitude)
-                viewModel.setCoordFromArgs(Coord(it.latitude, it.longitude))
-                /*val bundle = Bundle().apply {
-                    putParcelable("coord", Coord(it.latitude, it.longitude))
-                }
-                findNavController().navigate(
-                    R.id.action_mapFragment_to_navigation_home,
-                    bundle
-                )*/
+                viewModel.getForecastWeatherGeoCoordinates(it.latitude, it.longitude)
                 findNavController().popBackStack()
             }
             builder.setNegativeButton("Нет", null)
