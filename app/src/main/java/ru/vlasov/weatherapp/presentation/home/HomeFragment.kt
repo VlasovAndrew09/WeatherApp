@@ -13,19 +13,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import ru.vlasov.weatherapp.R
 import ru.vlasov.weatherapp.databinding.FragmentHomeBinding
-import ru.vlasov.weatherapp.domain.util.Resource
 import ru.vlasov.weatherapp.presentation.home.adapter.ForecastDayListAdapter
 import javax.inject.Inject
 
@@ -34,7 +28,9 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by activityViewModels()
     val args: HomeFragmentArgs by navArgs()
-    @Inject lateinit var locationProviderClient: FusedLocationProviderClient
+
+    @Inject
+    lateinit var locationProviderClient: FusedLocationProviderClient
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     private var _binding: FragmentHomeBinding? = null
@@ -53,20 +49,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        permissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) {
-        }
-        permissionLauncher.launch(arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-        ))
-
-        /*val coord = args.coord
-        args.toBundle().clear()
-        coord?.let {
-            viewModel.setCoordFromArgs(it)
-        }*/
+        requestPermissions()
 
         val adapter = ForecastDayListAdapter()
         adapter.onItemClickListener = {
@@ -81,57 +64,51 @@ class HomeFragment : Fragment() {
         }
         binding.rvForecast.adapter = adapter
 
-        viewModel.weatherForecast.observe(viewLifecycleOwner) { response ->
-            when(response) {
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    response.data?.let { data ->
-                        with(binding.containerCardWeather) {
-                            tvCity.text = viewModel.getCityName()
-                            txDateTime.text = "Сейчас"
-                            tvTemperature.text = data.currentWeatherResponse.main.temp
-                            tvWeatherDescription.text =
-                                data.currentWeatherResponse.weather[0].description
-                            tvWindSpeed.text = data.currentWeatherResponse.wind.speed
-                            tvPressure.text = data.currentWeatherResponse.main.pressure
-                            tvHumidity.text = data.currentWeatherResponse.main.humidity
-                            Glide.with(this@HomeFragment).load(data.currentWeatherResponse.weather[0].icon)
-                                .into(ivWeatherIcon)
-
-                            adapter.submitList(data.forecastResponse.listDays)
-                        }
-                    }
+        viewModel.weatherForecast.observe(viewLifecycleOwner) { weatherForecast ->
+            with(weatherForecast) {
+                with(binding.containerCardWeather) {
+                    tvCity.text = viewModel.getCityName()
+                    txDateTime.text = "Сейчас"
+                    tvTemperature.text = currentWeatherResponse.main.temp
+                    tvWeatherDescription.text = currentWeatherResponse.weather[0].description
+                    tvWindSpeed.text = currentWeatherResponse.wind.speed
+                    tvPressure.text = currentWeatherResponse.main.pressure
+                    tvHumidity.text = currentWeatherResponse.main.humidity
+                    Glide.with(this@HomeFragment)
+                        .load(currentWeatherResponse.weather[0].icon)
+                        .into(ivWeatherIcon)
+                    adapter.submitList(forecastResponse.listDays)
                 }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    response.message?.let {
-                        showAlertDialog(it)
-                    }
-                }
-                is Resource.Loading -> {
+            }
+        }
+        viewModel.showLoading.observe(viewLifecycleOwner) { showLoading ->
+            when (showLoading) {
+                true -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
-                is Resource.Empty -> {
+                false -> {
+                    binding.progressBar.visibility = View.INVISIBLE
+                }
+            }
+        }
+        viewModel.isEmpty.observe(viewLifecycleOwner) { isEmpty ->
+            when (isEmpty) {
+                true -> {
+                    binding.containerCardWeather.cardWeather.visibility = View.INVISIBLE
+                    binding.tvForecast5Days.visibility = View.INVISIBLE
+                    binding.rvForecast.visibility = View.INVISIBLE
+                }
+                false -> {
+                    binding.containerCardWeather.cardWeather.visibility = View.VISIBLE
+                    binding.tvForecast5Days.visibility = View.VISIBLE
+                    binding.rvForecast.visibility = View.VISIBLE
+                }
+            }
+        }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            showAlertDialog(errorMessage)
+        }
 
-                }
-            }
-        }
-        viewModel.coordFromArgs.observe(viewLifecycleOwner) { coord ->
-            if (coord != null) {
-                viewModel.getForecastWeatherGeoCoordinates(coord.lat, coord.lon)
-                viewModel.coordFromArgs.value = null
-            }
-        }
-        /*lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { coord ->
-                    if (coord != null) {
-                        viewModel.getForecastWeatherGeoCoordinates(coord.lat, coord.lon)
-                        viewModel.set_uiStatenull()
-                    }
-                }
-            }
-        }*/
         setHasOptionsMenu(true)
     }
 
@@ -141,7 +118,10 @@ class HomeFragment : Fragment() {
         val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { viewModel.getWeatherForecastCity(it) }
+                query?.let {
+                    viewModel.getWeatherForecastCity(it)
+                    searchView.onActionViewCollapsed()
+                }
                 return false
             }
 
@@ -149,11 +129,6 @@ class HomeFragment : Fragment() {
                 return false
             }
         })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("f", true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -180,6 +155,19 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun requestPermissions() {
+        permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) {
+        }
+        permissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            )
+        )
     }
 
     private fun showAlertDialog(message: String) {
