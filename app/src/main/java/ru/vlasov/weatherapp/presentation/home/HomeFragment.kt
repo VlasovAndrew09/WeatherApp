@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
             with(weatherForecast) {
                 with(binding.containerCardWeather) {
                     tvCity.text = viewModel.getCityName()
-                    txDateTime.text = "Сейчас"
+                    txDateTime.text = getString(R.string.now)
                     tvTemperature.text = currentWeatherResponse.main.temp
                     tvWeatherDescription.text = currentWeatherResponse.weather[0].description
                     tvWindSpeed.text = currentWeatherResponse.wind.speed
@@ -174,7 +174,7 @@ class HomeFragment : Fragment() {
         context?.let {
             val builder = AlertDialog.Builder(it)
             builder.setMessage(message)
-                .setNegativeButton("Закрыть", null)
+                .setNegativeButton(R.string.close, null)
             builder.create().show()
         }
     }
@@ -182,9 +182,9 @@ class HomeFragment : Fragment() {
     private fun showAlertDialogRequestPermissions() {
         context?.let {
             val builder = AlertDialog.Builder(it)
-            builder.setMessage("У приложения нет разрешения для определения местоположения. Открыть настройки?")
-                .setNegativeButton("Нет", null)
-                .setPositiveButton("Да") { _, _ ->
+            builder.setMessage(getString(R.string.not_have_location_permission))
+                .setNegativeButton(getString(R.string.no), null)
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 }
             builder.create().show()

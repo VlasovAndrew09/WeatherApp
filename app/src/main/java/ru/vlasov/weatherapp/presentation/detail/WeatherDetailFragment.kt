@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import ru.vlasov.weatherapp.R
 import ru.vlasov.weatherapp.databinding.FragmentWeatherDetailBinding
 import ru.vlasov.weatherapp.presentation.detail.adapter.ForecastHourListAdapter
 
@@ -47,7 +48,7 @@ class WeatherDetailFragment : Fragment() {
         viewModel.weatherForecastDay.observe(viewLifecycleOwner) { weatherForecastDay ->
             adapter.submitList(weatherForecastDay.list)
             with(binding.containerCardWeather) {
-                tvCity.text = "${args.cityName}, ${weatherForecastDay.day}"
+                tvCity.text = getString(R.string.cityNameAndDay, args.cityName, weatherForecastDay.day)
             }
         }
 

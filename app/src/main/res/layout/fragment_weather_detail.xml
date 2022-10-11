@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:orientation="horizontal"
+                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_forecast_hour" />
         </com.google.android.material.card.MaterialCardView>

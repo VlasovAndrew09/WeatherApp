@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="close">Закрыть</string>
+    <string name="forecast_for_5_days">Прогноз на 5 дней</string>
+    <string name="now">Сейчас</string>
+    <string name="cityNameAndDay">%1$s, %2$s</string>
+    <string name="not_have_location_permission">У приложения нет разрешения для определения местоположения. Открыть настройки?</string>
+    <string name="check_network_connection">Проверьте подключение к сети и повторите попытку.</string>
+    <string name="unknown_error_occurred">Упс! Произошла неизвестная ошибка.</string>
+    <string name="enable_geolocation">Не удалось получить местоположение. Включите на устройстве геолокацию.</string>
+    <string name="failed_to_get_location">Не удалось получить местоположение.</string>
 </resources>
