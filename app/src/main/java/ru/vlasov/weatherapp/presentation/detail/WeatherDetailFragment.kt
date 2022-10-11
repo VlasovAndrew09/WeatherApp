@@ -1,27 +1,16 @@
 package ru.vlasov.weatherapp.presentation.detail
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.AndroidEntryPoint
-import ru.vlasov.weatherapp.R
-import ru.vlasov.weatherapp.databinding.FragmentHomeBinding
 import ru.vlasov.weatherapp.databinding.FragmentWeatherDetailBinding
-import ru.vlasov.weatherapp.domain.util.Resource
 import ru.vlasov.weatherapp.presentation.detail.adapter.ForecastHourListAdapter
-import ru.vlasov.weatherapp.presentation.home.HomeFragmentArgs
-import ru.vlasov.weatherapp.presentation.home.HomeViewModel
-import ru.vlasov.weatherapp.presentation.home.adapter.ForecastDayListAdapter
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class WeatherDetailFragment : Fragment() {

@@ -1,15 +1,12 @@
 package ru.vlasov.weatherapp.data
 
 import android.app.Application
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import ru.vlasov.weatherapp.data.location.DefaultLocationTracker
 import ru.vlasov.weatherapp.data.mapper.toCurrentWeatherResponse
 import ru.vlasov.weatherapp.data.mapper.toForecastResponse
 import ru.vlasov.weatherapp.data.remote.WeatherApi
 import ru.vlasov.weatherapp.data.remote.isInternetAvailable
 import ru.vlasov.weatherapp.domain.location.LocationTracker
 import ru.vlasov.weatherapp.domain.repository.WeatherRepository
-import ru.vlasov.weatherapp.domain.model.ForecastResponse
 import ru.vlasov.weatherapp.domain.model.Weather
 import ru.vlasov.weatherapp.domain.util.Resource
 import javax.inject.Inject

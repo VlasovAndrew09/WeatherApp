@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,7 +19,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import ru.vlasov.weatherapp.R
 import ru.vlasov.weatherapp.databinding.FragmentMapBinding
-import ru.vlasov.weatherapp.domain.model.Coord
 import ru.vlasov.weatherapp.presentation.home.HomeViewModel
 
 @AndroidEntryPoint

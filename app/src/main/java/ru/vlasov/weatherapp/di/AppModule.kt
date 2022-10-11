@@ -1,7 +1,6 @@
 package ru.vlasov.weatherapp.di
 
 import android.app.Application
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides

@@ -1,7 +1,5 @@
 package ru.vlasov.weatherapp.data.remote
 
-import androidx.viewbinding.BuildConfig
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.vlasov.weatherapp.data.remote.model.CurrentWeatherResponseDto
